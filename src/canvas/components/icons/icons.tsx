@@ -16,7 +16,7 @@ export const ArrowIcon = () => (
     </svg>
 );
 
-export const CircleIcon = () => (
+export const EllipseIcon = () => (
     <svg viewBox="0 0 18 18" className="w-[18px] h-[18px]" fill="none">
         <path d="M9 17C13.418 17 17 13.418 17 9C17 4.582 13.418 1 9 1C4.582 1 1 4.582 1 9C1 13.418 4.582 17 9 17ZM9 16C5.134 16 2 12.866 2 9C2 5.134 5.134 2 9 2C12.866 2 16 5.134 16 9C16 12.866 12.866 16 9 16Z" fill="currentColor" />
     </svg>

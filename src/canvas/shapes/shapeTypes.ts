@@ -5,13 +5,12 @@ export type LineShape = {
     x2: number;
     y2: number;
 };
-export type CircleShape = {
-    type: "circle";
-    x1: number;
-    y1: number;
-    radius: number;
-    startAngle: number;
-    endAngle: number;
+export type EllipseShape = {
+    type: "ellipse";
+    cx: number;
+    cy: number;
+    rx: number;
+    ry: number;
 }
 export type ArrowShape = {
     type: "arrow";
@@ -28,4 +27,26 @@ export type RectShape = {
     x2: number;
     y2: number;
 }
-export type Shape = LineShape | CircleShape | ArrowShape | RectShape;
+export type TriangleShape = {
+    type: "triangle";
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+}
+export type StarShape = {
+    type: "star";
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+}
+export type ArcType = {
+    type: "arc";
+    cx: number;
+    cy: number;
+    r: number;
+    startAngle: number;
+    endAngle: number;
+}
+export type Shape = LineShape | EllipseShape | ArrowShape | RectShape | TriangleShape | StarShape | ArcType;

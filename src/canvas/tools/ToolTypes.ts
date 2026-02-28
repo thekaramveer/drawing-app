@@ -2,7 +2,7 @@ export type ToolType =
     | "rect"
     | "line"
     | "arrow"
-    | "circle"
+    | "ellipse"
     | "triangle"
     | "star"
-    | "image";
+    | "arc";

@@ -1,6 +1,7 @@
 import type { Shape } from "../shapes/shapeTypes";
 import { drawArrow } from "../utils/drawArrow";
 import { drawRect } from "../utils/drawRect";
+import { drawTriangle } from "../utils/drawTriangle";
 
 
 export function drawShape(
@@ -13,8 +14,10 @@ export function drawShape(
         ctx.moveTo(shape.x1, shape.y1);
         ctx.lineTo(shape.x2, shape.y2);
     }
-    if (shape.type === "circle") {
-        ctx.arc(shape.x1, shape.y1, shape.radius, shape.startAngle, shape.endAngle);
+    if (shape.type === "ellipse") {
+        ctx.beginPath();
+        ctx.ellipse(shape.cx, shape.cy, shape.rx, shape.ry, 0, 0, Math.PI * 2);
+        ctx.stroke();
 
     }
     if (shape.type === "arrow") {
@@ -22,6 +25,10 @@ export function drawShape(
     }
     if (shape.type === "rect") {
         drawRect(ctx, shape.x1, shape.y1, shape.x2, shape.y2)
+
+    }
+    if (shape.type === "triangle") {
+        drawTriangle(ctx, shape.x1, shape.y1, shape.x2, shape.y2)
 
     }
     ctx.stroke();

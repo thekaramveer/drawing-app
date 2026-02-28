@@ -11,10 +11,10 @@ const TOOLS: { type: ToolType; icon: IconName }[] = [
     { type: "rect", icon: "rect" },
     { type: "line", icon: "line" },
     { type: "arrow", icon: "arrow" },
-    { type: "circle", icon: "circle" },
+    { type: "ellipse", icon: "ellipse" },
     { type: "triangle", icon: "triangle" },
     { type: "star", icon: "star" },
-    { type: "image", icon: "image" },
+    { type: "arc", icon: "image" },
 ];
 export default function Toolbar({ currentTool, setTool }: ToolbarProps) {
     return (

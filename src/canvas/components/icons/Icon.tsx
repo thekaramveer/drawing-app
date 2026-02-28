@@ -2,7 +2,7 @@ import {
     RectIcon,
     LineIcon,
     ArrowIcon,
-    CircleIcon,
+    EllipseIcon,
     TriangleIcon,
     StarIcon,
     ImageIcon,
@@ -12,7 +12,7 @@ export type IconName =
     | "rect"
     | "line"
     | "arrow"
-    | "circle"
+    | "ellipse"
     | "triangle"
     | "star"
     | "image";
@@ -21,7 +21,7 @@ const ICONS: Record<IconName, React.FC> = {
     rect: RectIcon,
     line: LineIcon,
     arrow: ArrowIcon,
-    circle: CircleIcon,
+    ellipse: EllipseIcon,
     triangle: TriangleIcon,
     star: StarIcon,
     image: ImageIcon,
