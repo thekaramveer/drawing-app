@@ -1,5 +1,6 @@
 import type { Shape } from "../shapes/shapeTypes";
 import { drawArrow } from "../utils/drawArrow";
+import { drawRect } from "../utils/drawRect";
 
 
 export function drawShape(
@@ -18,6 +19,10 @@ export function drawShape(
     }
     if (shape.type === "arrow") {
         drawArrow(ctx, shape.x1, shape.y1, shape.x2, shape.y2)
+    }
+    if (shape.type === "rect") {
+        drawRect(ctx, shape.x1, shape.y1, shape.x2, shape.y2)
+
     }
     ctx.stroke();
 

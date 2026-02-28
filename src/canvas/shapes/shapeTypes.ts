@@ -21,4 +21,11 @@ export type ArrowShape = {
     y2: number;
 };
 
-export type Shape = LineShape | CircleShape | ArrowShape;
+export type RectShape = {
+    type: "rect";
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+}
+export type Shape = LineShape | CircleShape | ArrowShape | RectShape;
