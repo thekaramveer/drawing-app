@@ -1,6 +1,7 @@
 import type { Shape } from "../shapes/shapeTypes";
 import { drawArrow } from "../utils/drawArrow";
 import { drawRect } from "../utils/drawRect";
+import { drawStar } from "../utils/drawStar";
 import { drawTriangle } from "../utils/drawTriangle";
 
 
@@ -31,6 +32,10 @@ export function drawShape(
         drawTriangle(ctx, shape.x1, shape.y1, shape.x2, shape.y2)
 
     }
+    if (shape.type === "star") {
+        drawStar(ctx, shape.x1, shape.y1, shape.x2, shape.y2)
+    }
+
     ctx.stroke();
 
 }
