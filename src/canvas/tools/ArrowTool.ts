@@ -1,5 +1,6 @@
 import type { Tool } from "./Tool";
 import { addShape } from "../shapes/shapeStore";
+const DRAG_THRESHOLD = 5;
 
 
 export class ArrowTool implements Tool {
@@ -8,6 +9,7 @@ export class ArrowTool implements Tool {
     private currentX = 0;
     private currentY = 0;
     private drawing = false;
+    private hasDragged = false;
 
     onMouseDown(x: number, y: number) {
         this.startX = x;
@@ -15,16 +17,30 @@ export class ArrowTool implements Tool {
         this.currentX = x;
         this.currentY = y;
         this.drawing = true;
+        this.hasDragged = false;
     }
 
     onMouseMove(x: number, y: number) {
         if (!this.drawing) return;
-        this.currentX = x;
-        this.currentY = y;
+        const dx = x - this.startX;
+        const dy = y - this.startY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (!this.hasDragged && distance > DRAG_THRESHOLD) {
+            this.hasDragged = true;
+        }
+        if (this.hasDragged) {
+            this.currentX = x;
+            this.currentY = y;
+        }
+
     }
 
     onMouseUp(x: number, y: number) {
         if (!this.drawing) return;
+        this.drawing = false;
+        if (!this.hasDragged) {
+            return;
+        }
 
         addShape({
             type: "arrow",
@@ -33,12 +49,10 @@ export class ArrowTool implements Tool {
             x2: x,
             y2: y
         });
-
-        this.drawing = false;
     }
 
     drawPreview(ctx: CanvasRenderingContext2D) {
-        if (!this.drawing) return;
+        if (!this.drawing || !this.hasDragged) return;
         this.drawArrow(ctx, this.startX, this.startY, this.currentX, this.currentY);
     }
 
