@@ -53,6 +53,7 @@ export class EllipseTool implements Tool {
         const { cx, cy, rx, ry } = this.getEllipseData(x, y);
 
         addShape({
+            id: crypto.randomUUID(),
             type: "ellipse",
             cx,
             cy,

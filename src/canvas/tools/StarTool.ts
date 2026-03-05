@@ -52,6 +52,7 @@ export class StarTool implements Tool {
         if (!this.hasDragged) return;
 
         addShape({
+            id: crypto.randomUUID(),
             type: "star",
             x1: this.startX,
             y1: this.startY,

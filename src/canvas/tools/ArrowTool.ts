@@ -48,6 +48,7 @@ export class ArrowTool implements Tool {
         }
 
         addShape({
+            id: crypto.randomUUID(),
             type: "arrow",
             x1: this.startX,
             y1: this.startY,

@@ -51,6 +51,7 @@ export class RectTool implements Tool {
             return;
         }
         addShape({
+            id: crypto.randomUUID(),
             type: "rect",
             x1: this.startX,
             y1: this.startY,

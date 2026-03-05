@@ -31,6 +31,7 @@ export class LineTool implements Tool {
         if (!this.drawing) return;
 
         addShape({
+            id: crypto.randomUUID(),
             type: "line",
             x1: this.startX,
             y1: this.startY,

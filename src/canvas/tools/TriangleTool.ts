@@ -50,6 +50,7 @@ export class TriangleTool implements Tool {
         if (!this.hasDragged) return;
 
         addShape({
+            id: crypto.randomUUID(),
             type: "triangle",
             x1: this.startX,
             y1: this.startY,
