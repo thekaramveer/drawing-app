@@ -39,11 +39,9 @@ export const StarIcon = () => (
     </svg>
 );
 
-export const ImageIcon = () => (
-    <svg viewBox="0 0 18 18" className="w-[18px] h-[18px]" fill="none">
-        <path fillRule="evenodd" clipRule="evenodd"
-            d="M12.5 10C13.88 10 15 8.88 15 7.5C15 6.12 13.88 5 12.5 5C11.12 5 10 6.12 10 7.5C10 8.88 11.12 10 12.5 10ZM14 7.5C14 8.328 13.328 9 12.5 9C11.672 9 11 8.328 11 7.5C11 6.672 11.672 6 12.5 6C13.328 6 14 6.672 14 7.5ZM17 1H1V17H17V1ZM16 2V16H14.707L6 7.293L2 11.293V2H16ZM2 16V12.707L6 8.707L13.293 16H2Z"
-            fill="currentColor"
-        />
+export const SelectoinIcon = () => (
+    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.206 7.379L0.98 0.592L0 0L0.231 1.121L2.914 14.121L3.157 15.299L3.821 14.296L6.859 9.706L12.079 8.289L13.206 7.983L12.206 7.379V7.379ZM1.442 2.04L10.689 7.63L6.415 8.79L6.233 8.84L6.129 8.996L3.65 12.742L1.442 2.04Z" fill="white" />
     </svg>
+
 );

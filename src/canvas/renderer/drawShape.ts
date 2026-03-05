@@ -10,7 +10,8 @@ export function drawShape(
     shape: Shape
 ) {
     ctx.beginPath();
-
+    ctx.strokeStyle = shape.style.stroke
+    ctx.lineWidth = shape.style.lineWidth
     if (shape.type === "line") {
         ctx.moveTo(shape.x1, shape.y1);
         ctx.lineTo(shape.x2, shape.y2);

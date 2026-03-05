@@ -1,3 +1,4 @@
+import type { DrawingStyle } from "../core/config/drawingStyle";
 import { addShape } from "../shapes/shapeStore";
 import type { Tool } from "./Tool";
 
@@ -13,6 +14,10 @@ export class RectTool implements Tool {
     private currentY = 0;
     private drawing = false;
     private hasDragged = false;
+    private style: DrawingStyle = {
+        stroke: "white",
+        lineWidth: 5
+    }
 
 
     onMouseDown(x: number, y: number): void {
@@ -50,14 +55,16 @@ export class RectTool implements Tool {
             x1: this.startX,
             y1: this.startY,
             x2: x,
-            y2: y
+            y2: y,
+            style: this.style
         })
     }
     drawPreview(ctx: CanvasRenderingContext2D) {
         ctx.beginPath();
         const w = this.currentX - this.startX;
         const h = this.currentY - this.startY;
-
+        ctx.strokeStyle = this.style.stroke;
+        ctx.lineWidth = this.style.lineWidth;
         ctx.rect(this.startX, this.startY, w, h);
         ctx.stroke();
         ctx.closePath();

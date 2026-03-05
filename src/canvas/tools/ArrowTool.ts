@@ -1,5 +1,6 @@
 import type { Tool } from "./Tool";
 import { addShape } from "../shapes/shapeStore";
+import type { DrawingStyle } from "../core/config/drawingStyle";
 const DRAG_THRESHOLD = 5;
 
 
@@ -10,6 +11,10 @@ export class ArrowTool implements Tool {
     private currentY = 0;
     private drawing = false;
     private hasDragged = false;
+    private style: DrawingStyle = {
+        stroke: "white",
+        lineWidth: 5
+    }
 
     onMouseDown(x: number, y: number) {
         this.startX = x;
@@ -47,7 +52,8 @@ export class ArrowTool implements Tool {
             x1: this.startX,
             y1: this.startY,
             x2: x,
-            y2: y
+            y2: y,
+            style: this.style
         });
     }
 
@@ -56,37 +62,17 @@ export class ArrowTool implements Tool {
         this.drawArrow(ctx, this.startX, this.startY, this.currentX, this.currentY);
     }
 
-    private drawArrow(
-        ctx: CanvasRenderingContext2D,
-        x1: number,
-        y1: number,
-        x2: number,
-        y2: number
-    ) {
-        const headLength = 12; // size of arrow head
-
+    private drawArrow(ctx: CanvasRenderingContext2D, x1: number, y1: number, x2: number, y2: number) {
+        const headLength = 12; // size of arrow head 
         const dx = x2 - x1;
         const dy = y2 - y1;
         const angle = Math.atan2(dy, dx);
-
         ctx.beginPath();
         ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-
-        // left side of arrow head
-        ctx.lineTo(
-            x2 - headLength * Math.cos(angle - Math.PI / 6),
-            y2 - headLength * Math.sin(angle - Math.PI / 6)
-        );
-
-        ctx.moveTo(x2, y2);
-
-        // right side of arrow head
-        ctx.lineTo(
-            x2 - headLength * Math.cos(angle + Math.PI / 6),
-            y2 - headLength * Math.sin(angle + Math.PI / 6)
-        );
-
-        ctx.stroke();
+        ctx.lineTo(x2, y2); // left side of arrow head 
+        ctx.lineTo(x2 - headLength * Math.cos(angle - Math.PI / 6), y2 - headLength * Math.sin(angle - Math.PI / 6));
+        ctx.moveTo(x2, y2); // right side of arrow head 
+        ctx.lineTo(x2 - headLength * Math.cos(angle + Math.PI / 6), y2 - headLength * Math.sin(angle + Math.PI / 6));
+        ctx.strokeStyle = this.style.stroke; ctx.lineWidth = this.style.lineWidth; ctx.stroke();
     }
 }

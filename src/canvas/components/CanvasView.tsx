@@ -7,7 +7,6 @@ import { attachPointerHandlers } from "../input/pointerHandlers";
 
 import Toolbar from "./Toolbar";
 import { toolRegistry } from "../tools/ToolRegistry";
-import { shapes } from "../shapes/shapeStore";
 
 export default function CanvasView() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -39,7 +38,6 @@ export default function CanvasView() {
     useEffect(() => {
         const engine = engineRef.current;
         if (!engine) return;
-        console.log(shapes)
         engine.setTool(toolRegistry[activeTool]());
     }, [activeTool]);
 

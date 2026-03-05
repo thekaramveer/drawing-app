@@ -6,7 +6,7 @@ import type { Tool } from "./Tool";
 import type { ToolType } from "./ToolTypes";
 import { TriangleTool } from "./TriangleTool";
 import { StarTool } from "./StarTool";
-import { ArcTool } from "./ArcTool";
+import { SelectionTool } from "./SelectionTool";
 
 
 export const toolRegistry: Record<ToolType, () => Tool> = {
@@ -16,6 +16,6 @@ export const toolRegistry: Record<ToolType, () => Tool> = {
     rect: () => new RectTool(),
     triangle: () => new TriangleTool(),
     star: () => new StarTool(),
-    arc: () => new ArcTool()
+    selection: () => new SelectionTool()
 
 };

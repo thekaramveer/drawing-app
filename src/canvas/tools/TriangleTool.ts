@@ -1,5 +1,6 @@
 import type { Tool } from "./Tool";
 import { addShape } from "../shapes/shapeStore";
+import type { DrawingStyle } from "../core/config/drawingStyle";
 
 const DRAG_THRESHOLD = 5;
 
@@ -8,16 +9,18 @@ export class TriangleTool implements Tool {
     private startY = 0;
     private currentX = 0;
     private currentY = 0;
-
     private drawing = false;
     private hasDragged = false;
+    private style: DrawingStyle = {
+        stroke: "white",
+        lineWidth: 5
+    }
 
     onMouseDown(x: number, y: number) {
         this.startX = x;
         this.startY = y;
         this.currentX = x;
         this.currentY = y;
-
         this.drawing = true;
         this.hasDragged = false;
     }
@@ -51,7 +54,8 @@ export class TriangleTool implements Tool {
             x1: this.startX,
             y1: this.startY,
             x2: x,
-            y2: y
+            y2: y,
+            style: this.style
         });
 
         this.hasDragged = false;
@@ -72,6 +76,8 @@ export class TriangleTool implements Tool {
     ) {
         const width = x2 - x1;
         const height = y2 - y1;
+        ctx.strokeStyle = this.style.stroke;
+        ctx.lineWidth = this.style.lineWidth;
 
         ctx.beginPath();
         ctx.moveTo(x1 + width / 2, y1);       // top center

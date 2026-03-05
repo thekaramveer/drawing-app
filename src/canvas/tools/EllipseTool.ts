@@ -1,5 +1,6 @@
 import type { Tool } from "./Tool";
 import { addShape } from "../shapes/shapeStore";
+import type { DrawingStyle } from "../core/config/drawingStyle";
 
 const DRAG_THRESHOLD = 5;
 
@@ -8,9 +9,12 @@ export class EllipseTool implements Tool {
     private startY = 0;
     private currentX = 0;
     private currentY = 0;
-
     private drawing = false;
     private hasDragged = false;
+    private style: DrawingStyle = {
+        stroke: "white",
+        lineWidth: 5
+    }
 
     onMouseDown(x: number, y: number) {
         this.startX = x;
@@ -53,7 +57,8 @@ export class EllipseTool implements Tool {
             cx,
             cy,
             rx,
-            ry
+            ry,
+            style: this.style
         });
 
         this.hasDragged = false;
@@ -66,7 +71,8 @@ export class EllipseTool implements Tool {
             this.currentX,
             this.currentY
         );
-
+        ctx.strokeStyle = this.style.stroke;
+        ctx.lineWidth = this.style.lineWidth;
         ctx.beginPath();
         ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
         ctx.stroke();

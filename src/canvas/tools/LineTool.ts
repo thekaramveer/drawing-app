@@ -1,5 +1,6 @@
 import type { Tool } from "./Tool";
 import { addShape } from "../shapes/shapeStore";
+import type { DrawingStyle } from "../core/config/drawingStyle";
 
 export class LineTool implements Tool {
     private startX = 0;
@@ -7,6 +8,10 @@ export class LineTool implements Tool {
     private currentX = 0;
     private currentY = 0;
     private drawing = false;
+    private style: DrawingStyle = {
+        stroke: "white",
+        lineWidth: 5
+    }
 
     onMouseDown(x: number, y: number) {
         this.startX = x;
@@ -30,7 +35,8 @@ export class LineTool implements Tool {
             x1: this.startX,
             y1: this.startY,
             x2: x,
-            y2: y
+            y2: y,
+            style: this.style
         });
 
         this.drawing = false;
@@ -38,7 +44,8 @@ export class LineTool implements Tool {
 
     drawPreview(ctx: CanvasRenderingContext2D) {
         if (!this.drawing) return;
-
+        ctx.strokeStyle = this.style.stroke;
+        ctx.lineWidth = this.style.lineWidth;
         ctx.beginPath();
         ctx.moveTo(this.startX, this.startY);
         ctx.lineTo(this.currentX, this.currentY);

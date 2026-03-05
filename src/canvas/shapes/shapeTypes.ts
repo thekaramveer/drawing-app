@@ -1,9 +1,12 @@
+import type { DrawingStyle } from "../core/config/drawingStyle";
+
 export type LineShape = {
     type: "line";
     x1: number;
     y1: number;
     x2: number;
     y2: number;
+    style: DrawingStyle;
 };
 export type EllipseShape = {
     type: "ellipse";
@@ -11,6 +14,7 @@ export type EllipseShape = {
     cy: number;
     rx: number;
     ry: number;
+    style: DrawingStyle;
 }
 export type ArrowShape = {
     type: "arrow";
@@ -18,6 +22,7 @@ export type ArrowShape = {
     y1: number;
     x2: number;
     y2: number;
+    style: DrawingStyle;
 };
 
 export type RectShape = {
@@ -26,6 +31,7 @@ export type RectShape = {
     y1: number;
     x2: number;
     y2: number;
+    style: DrawingStyle;
 }
 export type TriangleShape = {
     type: "triangle";
@@ -33,6 +39,7 @@ export type TriangleShape = {
     y1: number;
     x2: number;
     y2: number;
+    style: DrawingStyle;
 }
 export type StarShape = {
     type: "star";
@@ -40,13 +47,7 @@ export type StarShape = {
     y1: number;
     x2: number;
     y2: number;
+    style: DrawingStyle;
 }
-export type ArcType = {
-    type: "arc";
-    cx: number;
-    cy: number;
-    r: number;
-    startAngle: number;
-    endAngle: number;
-}
-export type Shape = LineShape | EllipseShape | ArrowShape | RectShape | TriangleShape | StarShape | ArcType;
+
+export type Shape = LineShape | EllipseShape | ArrowShape | RectShape | TriangleShape | StarShape;
