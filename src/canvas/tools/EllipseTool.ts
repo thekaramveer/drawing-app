@@ -55,10 +55,10 @@ export class EllipseTool implements Tool {
         addShape({
             id: crypto.randomUUID(),
             type: "ellipse",
-            cx,
-            cy,
-            rx,
-            ry,
+            x1: cx,
+            y1: cy,
+            x2: rx,
+            y2: ry,
             style: this.style
         });
 

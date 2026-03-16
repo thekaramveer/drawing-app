@@ -18,7 +18,7 @@ export function drawShape(
     }
     if (shape.type === "ellipse") {
         ctx.beginPath();
-        ctx.ellipse(shape.cx, shape.cy, shape.rx, shape.ry, 0, 0, Math.PI * 2);
+        ctx.ellipse(shape.x1, shape.y1, shape.x2, shape.y2, 0, 0, Math.PI * 2);
         ctx.stroke();
 
     }

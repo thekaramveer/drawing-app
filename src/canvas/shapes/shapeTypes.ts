@@ -12,10 +12,10 @@ export type LineShape = {
 export type EllipseShape = {
     id: string;
     type: "ellipse";
-    cx: number;
-    cy: number;
-    rx: number;
-    ry: number;
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
     style: DrawingStyle;
 }
 export type ArrowShape = {

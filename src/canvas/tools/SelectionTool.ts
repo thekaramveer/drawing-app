@@ -1,4 +1,6 @@
 import type { Tool } from "./Tool";
+import { setSelectedShape, shapes } from "../shapes/shapeStore";
+import { isPointNearLine } from "../utils/hitTest/pointerDetection";
 
 const DRAG_THRESHOLD = 5;
 
@@ -19,6 +21,24 @@ export class SelectionTool implements Tool {
 
         this.drawing = true;
         this.hasDragged = false;
+
+        // check from topmost shape
+        for (let i = shapes.length - 1; i >= 0; i--) {
+
+            const shape = shapes[i];
+
+            if (shape.type === "line" || shape.type === "arrow") {
+                if (isPointNearLine(x, y, shape)) {
+                    // IMPORTANT
+                    // we must assign to exported variable
+                    setSelectedShape(shape.id);
+                    return;
+                }
+            }
+        }
+
+        // clicked empty space
+        setSelectedShape(null);
     }
 
     onMouseMove(x: number, y: number) {
@@ -54,14 +74,17 @@ export class SelectionTool implements Tool {
 
     drawPreview(ctx: CanvasRenderingContext2D) {
         if (!this.drawing) return
+        ctx.save()
         ctx.beginPath();
         const w = this.currentX - this.startX;
         const h = this.currentY - this.startY;
         ctx.strokeStyle = "blue";
-        ctx.fillStyle = "#e3f0f4"
+        ctx.fillStyle = "#e3f0f4";
+        ctx.setLineDash([5, 5]);
         ctx.rect(this.startX, this.startY, w, h);
         ctx.stroke();
         ctx.closePath();
+        ctx.restore();
 
 
     }
