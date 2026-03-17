@@ -111,4 +111,5 @@ export class StarTool implements Tool {
         ctx.closePath();
         ctx.stroke();
     }
+
 }

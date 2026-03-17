@@ -50,15 +50,13 @@ export class EllipseTool implements Tool {
 
         if (!this.hasDragged) return;
 
-        const { cx, cy, rx, ry } = this.getEllipseData(x, y);
-
         addShape({
             id: crypto.randomUUID(),
             type: "ellipse",
-            x1: cx,
-            y1: cy,
-            x2: rx,
-            y2: ry,
+            x1: this.startX,
+            y1: this.startY,
+            x2: x,
+            y2: y,
             style: this.style
         });
 
@@ -93,4 +91,5 @@ export class EllipseTool implements Tool {
 
         return { cx, cy, rx, ry };
     }
+
 }

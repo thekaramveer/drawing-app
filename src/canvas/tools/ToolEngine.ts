@@ -28,4 +28,5 @@ export class ToolEngine {
     drawPreview(ctx: CanvasRenderingContext2D) {
         this.currentTool.drawPreview(ctx);
     }
+
 }

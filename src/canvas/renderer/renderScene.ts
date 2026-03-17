@@ -20,5 +20,7 @@ export function renderScene(
         if (selected) {
             drawSelectionOutline(ctx, selected);
         }
+
     }
+
 }

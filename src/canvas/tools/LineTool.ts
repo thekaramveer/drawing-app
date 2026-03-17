@@ -52,4 +52,7 @@ export class LineTool implements Tool {
         ctx.lineTo(this.currentX, this.currentY);
         ctx.stroke();
     }
+
+
+
 }

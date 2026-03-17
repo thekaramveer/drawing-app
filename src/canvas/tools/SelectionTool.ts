@@ -1,91 +1,65 @@
 import type { Tool } from "./Tool";
-import { setSelectedShape, shapes } from "../shapes/shapeStore";
-import { isPointNearLine } from "../utils/hitTest/pointerDetection";
+import { selectedShapeId, setSelectedShapeId, shapes } from "../shapes/shapeStore";
+import type { DrawingStyle } from "../core/config/drawingStyle";
+import { hitTest } from "../utils/hitTest/hitTest";
 
 const DRAG_THRESHOLD = 5;
 
 export class SelectionTool implements Tool {
-    private startX = 0;
-    private startY = 0;
-    private currentX = 0;
-    private currentY = 0;
+    private dragging = false;
+    private lastX = 0;
+    private lastY = 0;
 
-    private drawing = false;
-    private hasDragged = false;
+
+
+    private style: DrawingStyle = {
+        stroke: "white",
+        lineWidth: 5
+    }
 
     onMouseDown(x: number, y: number) {
-        this.startX = x;
-        this.startY = y;
-        this.currentX = x;
-        this.currentY = y;
 
-        this.drawing = true;
-        this.hasDragged = false;
-
-        // check from topmost shape
         for (let i = shapes.length - 1; i >= 0; i--) {
-
             const shape = shapes[i];
 
-            if (shape.type === "line" || shape.type === "arrow") {
-                if (isPointNearLine(x, y, shape)) {
-                    // IMPORTANT
-                    // we must assign to exported variable
-                    setSelectedShape(shape.id);
-                    return;
-                }
+            if (hitTest(shape, x, y)) {
+                setSelectedShapeId(shape.id);
+
+                this.dragging = true;
+                this.lastX = x;
+                this.lastY = y;
+
+                return;
             }
         }
 
-        // clicked empty space
-        setSelectedShape(null);
+        setSelectedShapeId(null);
     }
 
     onMouseMove(x: number, y: number) {
-        if (!this.drawing) return;
+        if (!this.dragging || !selectedShapeId) return;
 
-        const dx = x - this.startX;
-        const dy = y - this.startY;
-        const distanceSquared = dx * dx + dy * dy;
+        const shape = shapes.find(s => s.id === selectedShapeId);
+        if (!shape) return;
 
-        if (!this.hasDragged && distanceSquared > DRAG_THRESHOLD * DRAG_THRESHOLD) {
-            this.hasDragged = true;
-        }
+        const dx = x - this.lastX;
+        const dy = y - this.lastY;
 
-        if (this.hasDragged) {
-            this.currentX = x;
-            this.currentY = y;
-        }
+        shape.x1 += dx;
+        shape.y1 += dy;
+        shape.x2 += dx;
+        shape.y2 += dy;
+
+        this.lastX = x;
+        this.lastY = y;
     }
 
-    onMouseUp(x: number, y: number) {
-        if (!this.drawing) return;
-        this.currentX = x;
-        this.currentY = y;
-
-        this.drawing = false;
-
-        if (!this.hasDragged) return;
-
-
-
-        this.hasDragged = false;
+    onMouseUp() {
+        this.dragging = false;
     }
 
-    drawPreview(ctx: CanvasRenderingContext2D) {
-        if (!this.drawing) return
-        ctx.save()
-        ctx.beginPath();
-        const w = this.currentX - this.startX;
-        const h = this.currentY - this.startY;
-        ctx.strokeStyle = "blue";
-        ctx.fillStyle = "#e3f0f4";
-        ctx.setLineDash([5, 5]);
-        ctx.rect(this.startX, this.startY, w, h);
-        ctx.stroke();
-        ctx.closePath();
-        ctx.restore();
-
+    drawPreview(ctx: CanvasRenderingContext2D): void {
 
     }
+
 }

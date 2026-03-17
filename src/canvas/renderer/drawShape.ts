@@ -1,5 +1,7 @@
 import type { Shape } from "../shapes/shapeTypes";
 import { drawArrow } from "../utils/drawArrow";
+import { drawEllipse } from "../utils/drawEllipse";
+import { drawLine } from "../utils/drawLine";
 import { drawRect } from "../utils/drawRect";
 import { drawStar } from "../utils/drawStar";
 import { drawTriangle } from "../utils/drawTriangle";
@@ -9,17 +11,15 @@ export function drawShape(
     ctx: CanvasRenderingContext2D,
     shape: Shape
 ) {
+    ctx.save();
     ctx.beginPath();
     ctx.strokeStyle = shape.style.stroke
     ctx.lineWidth = shape.style.lineWidth
     if (shape.type === "line") {
-        ctx.moveTo(shape.x1, shape.y1);
-        ctx.lineTo(shape.x2, shape.y2);
+        drawLine(ctx, shape.x1, shape.y1, shape.x2, shape.y2);
     }
     if (shape.type === "ellipse") {
-        ctx.beginPath();
-        ctx.ellipse(shape.x1, shape.y1, shape.x2, shape.y2, 0, 0, Math.PI * 2);
-        ctx.stroke();
+        drawEllipse(ctx, shape.x1, shape.y1, shape.x2, shape.y2);
 
     }
     if (shape.type === "arrow") {
@@ -38,5 +38,6 @@ export function drawShape(
     }
 
     ctx.stroke();
+    ctx.restore();
 
 }

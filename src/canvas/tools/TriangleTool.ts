@@ -87,4 +87,5 @@ export class TriangleTool implements Tool {
         ctx.closePath();
         ctx.stroke();
     }
+
 }

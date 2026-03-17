@@ -76,4 +76,5 @@ export class ArrowTool implements Tool {
         ctx.lineTo(x2 - headLength * Math.cos(angle + Math.PI / 6), y2 - headLength * Math.sin(angle + Math.PI / 6));
         ctx.strokeStyle = this.style.stroke; ctx.lineWidth = this.style.lineWidth; ctx.stroke();
     }
+
 }
