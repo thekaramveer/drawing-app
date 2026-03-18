@@ -7,7 +7,7 @@ import { attachPointerHandlers } from "../input/pointerHandlers";
 
 import Toolbar from "./Toolbar";
 import { toolRegistry } from "../tools/ToolRegistry";
-import { deleteSelectedShape } from "../shapes/shapeStore";
+import { deleteSelectedShape, redo, undo } from "../shapes/shapeStore";
 
 export default function CanvasView() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -29,6 +29,16 @@ export default function CanvasView() {
         function handleKeyDown(e: KeyboardEvent) {
             if (e.key === "Delete" || e.key === "Backspace") {
                 deleteSelectedShape();
+            }
+
+            if (e.ctrlKey && e.key === "z") {
+                e.preventDefault();
+                undo();
+            }
+
+            if (e.ctrlKey && e.key === "y") {
+                e.preventDefault();
+                redo();
             }
         }
         window.addEventListener("keydown", handleKeyDown);

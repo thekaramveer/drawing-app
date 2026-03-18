@@ -1,5 +1,5 @@
 import type { DrawingStyle } from "../core/config/drawingStyle";
-import { addShape } from "../shapes/shapeStore";
+import { addShape, saveState } from "../shapes/shapeStore";
 import type { Tool } from "./Tool";
 
 
@@ -50,6 +50,8 @@ export class RectTool implements Tool {
         if (!this.hasDragged) {
             return;
         }
+
+        saveState();
         addShape({
             id: crypto.randomUUID(),
             type: "rect",

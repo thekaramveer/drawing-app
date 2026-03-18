@@ -1,5 +1,5 @@
 import type { Tool } from "./Tool";
-import { selectedShapeId, setSelectedShapeId, shapes } from "../shapes/shapeStore";
+import { saveState, selectedShapeId, setSelectedShapeId, shapes } from "../shapes/shapeStore";
 import type { DrawingStyle } from "../core/config/drawingStyle";
 import { hitTest } from "../utils/hitTest/hitTest";
 
@@ -25,6 +25,7 @@ export class SelectionTool implements Tool {
             if (hitTest(shape, x, y)) {
                 setSelectedShapeId(shape.id);
 
+                saveState();
                 this.dragging = true;
                 this.lastX = x;
                 this.lastY = y;
@@ -56,6 +57,7 @@ export class SelectionTool implements Tool {
 
     onMouseUp() {
         this.dragging = false;
+        saveState();
     }
 
     drawPreview(ctx: CanvasRenderingContext2D): void {

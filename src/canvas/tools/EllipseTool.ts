@@ -1,5 +1,5 @@
 import type { Tool } from "./Tool";
-import { addShape } from "../shapes/shapeStore";
+import { addShape, saveState } from "../shapes/shapeStore";
 import type { DrawingStyle } from "../core/config/drawingStyle";
 
 const DRAG_THRESHOLD = 5;
@@ -49,7 +49,7 @@ export class EllipseTool implements Tool {
         this.drawing = false;
 
         if (!this.hasDragged) return;
-
+        saveState();
         addShape({
             id: crypto.randomUUID(),
             type: "ellipse",
