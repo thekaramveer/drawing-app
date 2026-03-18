@@ -1,40 +1,51 @@
 import type { Tool } from "./Tool";
-import { saveState, selectedShapeId, setSelectedShapeId, shapes } from "../shapes/shapeStore";
-import type { DrawingStyle } from "../core/config/drawingStyle";
+import {
+    saveState,
+    selectedShapeId,
+    setSelectedShapeId,
+    shapes
+} from "../shapes/shapeStore";
 import { hitTest } from "../utils/hitTest/hitTest";
 
 const DRAG_THRESHOLD = 5;
 
 export class SelectionTool implements Tool {
     private dragging = false;
+    private hasMoved = false;
     private lastX = 0;
     private lastY = 0;
 
-
-
-    private style: DrawingStyle = {
-        stroke: "white",
-        lineWidth: 5
-    }
-
     onMouseDown(x: number, y: number) {
+        this.dragging = false;
+        this.hasMoved = false;
 
+        let clickedShape = null;
+
+        // top-most shape detection
         for (let i = shapes.length - 1; i >= 0; i--) {
-            const shape = shapes[i];
-
-            if (hitTest(shape, x, y)) {
-                setSelectedShapeId(shape.id);
-
-                saveState();
-                this.dragging = true;
-                this.lastX = x;
-                this.lastY = y;
-
-                return;
+            if (hitTest(shapes[i], x, y)) {
+                clickedShape = shapes[i];
+                break;
             }
         }
 
-        setSelectedShapeId(null);
+        // clicked on a shape
+        if (clickedShape) {
+            if (clickedShape.id !== selectedShapeId) {
+                // only save if selection actually changes
+                setSelectedShapeId(clickedShape.id);
+            }
+
+            this.dragging = true;
+            this.lastX = x;
+            this.lastY = y;
+            return;
+        }
+
+        //  clicked empty canvas
+        if (selectedShapeId !== null) {
+            setSelectedShapeId(null); // deselect
+        }
     }
 
     onMouseMove(x: number, y: number) {
@@ -46,22 +57,31 @@ export class SelectionTool implements Tool {
         const dx = x - this.lastX;
         const dy = y - this.lastY;
 
-        shape.x1 += dx;
-        shape.y1 += dy;
-        shape.x2 += dx;
-        shape.y2 += dy;
+        // detect actual movement
+        if (!this.hasMoved) {
+            const dist = dx * dx + dy * dy;
+            if (dist > DRAG_THRESHOLD * DRAG_THRESHOLD) {
+                this.hasMoved = true;
+                saveState(); //save BEFORE modifying 
+            }
+        }
 
-        this.lastX = x;
-        this.lastY = y;
+        if (this.hasMoved) {
+            shape.x1 += dx;
+            shape.y1 += dy;
+            shape.x2 += dx;
+            shape.y2 += dy;
+
+            this.lastX = x;
+            this.lastY = y;
+        }
     }
 
     onMouseUp() {
+        // reset
         this.dragging = false;
-        saveState();
+        this.hasMoved = false;
     }
 
-    drawPreview(ctx: CanvasRenderingContext2D): void {
-
-    }
-
+    drawPreview(ctx: CanvasRenderingContext2D): void { }
 }

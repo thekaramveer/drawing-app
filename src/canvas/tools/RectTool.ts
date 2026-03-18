@@ -2,23 +2,20 @@ import type { DrawingStyle } from "../core/config/drawingStyle";
 import { addShape, saveState } from "../shapes/shapeStore";
 import type { Tool } from "./Tool";
 
-
-
 const DRAG_THRESHOLD = 3;
 
 export class RectTool implements Tool {
-
     private startX = 0;
     private startY = 0;
     private currentX = 0;
     private currentY = 0;
     private drawing = false;
     private hasDragged = false;
+
     private style: DrawingStyle = {
         stroke: "white",
         lineWidth: 5
-    }
-
+    };
 
     onMouseDown(x: number, y: number): void {
         this.startX = x;
@@ -31,27 +28,34 @@ export class RectTool implements Tool {
 
     onMouseMove(x: number, y: number): void {
         if (!this.drawing) return;
+
         const dx = x - this.startX;
         const dy = y - this.startY;
         const distanceSquared = dx * dx + dy * dy;
+
         if (!this.hasDragged && distanceSquared > DRAG_THRESHOLD * DRAG_THRESHOLD) {
             this.hasDragged = true;
         }
+
         if (this.hasDragged) {
             this.currentX = x;
             this.currentY = y;
         }
-
     }
+
     onMouseUp(x: number, y: number): void {
         if (!this.drawing) return;
+
         this.drawing = false;
 
         if (!this.hasDragged) {
+            this.hasDragged = false;
             return;
         }
 
+
         saveState();
+
         addShape({
             id: crypto.randomUUID(),
             type: "rect",
@@ -60,19 +64,22 @@ export class RectTool implements Tool {
             x2: x,
             y2: y,
             style: this.style
-        })
+        });
+
+        this.hasDragged = false;
     }
+
     drawPreview(ctx: CanvasRenderingContext2D) {
-        ctx.beginPath();
+
+        if (!this.drawing || !this.hasDragged) return;
+
         const w = this.currentX - this.startX;
         const h = this.currentY - this.startY;
+
+        ctx.beginPath();
         ctx.strokeStyle = this.style.stroke;
         ctx.lineWidth = this.style.lineWidth;
         ctx.rect(this.startX, this.startY, w, h);
         ctx.stroke();
-        ctx.closePath();
-
-
     }
-
 }

@@ -59,8 +59,6 @@ export class EllipseTool implements Tool {
             y2: y,
             style: this.style
         });
-
-        this.hasDragged = false;
     }
 
     drawPreview(ctx: CanvasRenderingContext2D) {

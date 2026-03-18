@@ -2,12 +2,15 @@ import type { Tool } from "./Tool";
 import { addShape, saveState } from "../shapes/shapeStore";
 import type { DrawingStyle } from "../core/config/drawingStyle";
 
+
+const DRAG_THRESHOLD = 3;
 export class LineTool implements Tool {
     private startX = 0;
     private startY = 0;
     private currentX = 0;
     private currentY = 0;
     private drawing = false;
+    private hasDragged = false;
     private style: DrawingStyle = {
         stroke: "white",
         lineWidth: 5
@@ -19,16 +22,28 @@ export class LineTool implements Tool {
         this.currentX = x;
         this.currentY = y;
         this.drawing = true;
+        this.hasDragged = false;
     }
 
     onMouseMove(x: number, y: number) {
         if (!this.drawing) return;
-        this.currentX = x;
-        this.currentY = y;
+        const dx = x - this.startX;
+        const dy = y - this.startY;
+        const distanceSquared = dx * dx + dy * dy;
+        if (!this.hasDragged && distanceSquared > DRAG_THRESHOLD * DRAG_THRESHOLD) {
+            this.hasDragged = true;
+        }
+        if (this.hasDragged) {
+            this.currentX = x;
+            this.currentY = y;
+        }
+
     }
 
     onMouseUp(x: number, y: number) {
         if (!this.drawing) return;
+        this.drawing = false;
+        if (!this.hasDragged) return;
         saveState();
         addShape({
             id: crypto.randomUUID(),
@@ -39,12 +54,12 @@ export class LineTool implements Tool {
             y2: y,
             style: this.style
         });
-
-        this.drawing = false;
+        this.hasDragged = false;
     }
 
     drawPreview(ctx: CanvasRenderingContext2D) {
         if (!this.drawing) return;
+        if (!this.hasDragged) return;
         ctx.strokeStyle = this.style.stroke;
         ctx.lineWidth = this.style.lineWidth;
         ctx.beginPath();
