@@ -83,5 +83,5 @@ export class SelectionTool implements Tool {
         this.hasMoved = false;
     }
 
-    drawPreview(ctx: CanvasRenderingContext2D): void { }
+    drawPreview() { }
 }

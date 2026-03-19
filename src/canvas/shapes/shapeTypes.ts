@@ -1,69 +1,51 @@
 import type { DrawingStyle } from "../core/config/drawingStyle";
 
-export type LineShape = {
+// shared base
+type BaseShape = {
     id: string;
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    style: DrawingStyle;
+};
+
+// individual shapes
+export type LineShape = BaseShape & {
     type: "line";
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    style: DrawingStyle;
 };
-export type EllipseShape = {
-    id: string;
+
+export type EllipseShape = BaseShape & {
     type: "ellipse";
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    style: DrawingStyle;
-}
-export type ArrowShape = {
-    id: string;
-    type: "arrow";
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    style: DrawingStyle;
 };
 
-export type RectShape = {
-    id: string;
-    type: "rect";
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    style: DrawingStyle;
-}
-export type TriangleShape = {
-    id: string;
-    type: "triangle";
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    style: DrawingStyle;
-}
-export type StarShape = {
-    id: string;
-    type: "star";
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    style: DrawingStyle;
-}
-export type TextShape = {
-    id: string;
-    type: "text";
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    text?: string;
-    style: DrawingStyle;
-}
+export type ArrowShape = BaseShape & {
+    type: "arrow";
+};
 
-export type Shape = LineShape | EllipseShape | ArrowShape | RectShape | TriangleShape | StarShape | TextShape;
+export type RectShape = BaseShape & {
+    type: "rect";
+};
+
+export type TriangleShape = BaseShape & {
+    type: "triangle";
+};
+
+export type StarShape = BaseShape & {
+    type: "star";
+};
+
+export type TextShape = BaseShape & {
+    type: "text";
+    text: string;
+};
+
+// union
+export type Shape =
+    | LineShape
+    | EllipseShape
+    | ArrowShape
+    | RectShape
+    | TriangleShape
+    | StarShape
+    | TextShape;
