@@ -11,6 +11,11 @@ export function renderScene(
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     for (const shape of shapes) {
+        if (shape.type === "text") {
+            ctx.fillStyle = shape.style.stroke;
+            ctx.font = "16px sans-serif";
+            ctx.fillText(shape.text || "", shape.x1, shape.y1);
+        }
         drawShape(ctx, shape);
     }
     engine.drawPreview(ctx);

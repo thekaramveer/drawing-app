@@ -11,17 +11,6 @@
     border-radius: 999px;
 }
 
-.tool-btn {
-    width: 42px;
-    height: 42px;
-    border: none;
-    background: transparent;
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 /* .tool-btn.active {
     transform: scale(1.1);

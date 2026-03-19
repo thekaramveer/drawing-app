@@ -6,6 +6,7 @@ import {
     TriangleIcon,
     StarIcon,
     SelectoinIcon,
+    TextIcon
 } from "./icons";
 
 export type IconName =
@@ -15,7 +16,8 @@ export type IconName =
     | "ellipse"
     | "triangle"
     | "star"
-    | "selection";
+    | "selection"
+    | "text";
 
 const ICONS: Record<IconName, React.FC> = {
     rect: RectIcon,
@@ -25,6 +27,7 @@ const ICONS: Record<IconName, React.FC> = {
     triangle: TriangleIcon,
     star: StarIcon,
     selection: SelectoinIcon,
+    text: TextIcon
 };
 
 export function Icon({ name }: { name: IconName }) {

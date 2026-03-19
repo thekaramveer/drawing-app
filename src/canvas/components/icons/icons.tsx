@@ -45,3 +45,10 @@ export const SelectoinIcon = () => (
     </svg>
 
 );
+
+export const TextIcon = () => (
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3.60001 5.4H4.50001V2.7H9.00001V15.3H6.30001V16.2H12.6V15.3H9.90001V2.7H14.4V5.4H15.3V1.8H3.60001V5.4Z" fill="white" />
+    </svg>
+
+)

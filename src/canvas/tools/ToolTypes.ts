@@ -5,4 +5,5 @@ export type ToolType =
     | "ellipse"
     | "triangle"
     | "star"
-    | "selection";
+    | "selection"
+    | "text";

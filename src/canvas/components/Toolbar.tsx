@@ -15,6 +15,7 @@ const TOOLS: { type: ToolType; icon: IconName }[] = [
     { type: "triangle", icon: "triangle" },
     { type: "star", icon: "star" },
     { type: "selection", icon: "selection" },
+    { type: "text", icon: "text" },
 ];
 export default function Toolbar({ currentTool, setTool }: ToolbarProps) {
     return (

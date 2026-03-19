@@ -55,5 +55,15 @@ export type StarShape = {
     y2: number;
     style: DrawingStyle;
 }
+export type TextShape = {
+    id: string;
+    type: "text";
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    text?: string;
+    style: DrawingStyle;
+}
 
-export type Shape = LineShape | EllipseShape | ArrowShape | RectShape | TriangleShape | StarShape;
+export type Shape = LineShape | EllipseShape | ArrowShape | RectShape | TriangleShape | StarShape | TextShape;
