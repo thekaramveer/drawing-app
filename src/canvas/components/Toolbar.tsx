@@ -26,6 +26,7 @@ export default function Toolbar({ currentTool, setTool }: ToolbarProps) {
                     tool={t.type}
                     active={currentTool === t.type}
                     onSelect={setTool}
+                    title={t.type}
                 >
                     <span><Icon name={t.icon} /></span>
                 </ToolButton>

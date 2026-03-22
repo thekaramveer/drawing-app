@@ -5,6 +5,7 @@ type ToolButtonProps = {
     active?: boolean;
     onSelect: (tool: ToolType) => void;
     children: React.ReactNode;
+    title: string;
 };
 
 export function ToolButton({
@@ -12,6 +13,7 @@ export function ToolButton({
     active,
     onSelect,
     children,
+    title
 }: ToolButtonProps) {
     return (
         <button
@@ -25,6 +27,7 @@ export function ToolButton({
                     : "text-neutral-300 hover:bg-neutral-700 hover:text-white"}
   `}
             onClick={() => onSelect(tool)}
+            title={title}
         >
             {children}
         </button>

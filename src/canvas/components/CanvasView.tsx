@@ -7,7 +7,8 @@ import { attachPointerHandlers } from "../input/pointerHandlers";
 
 import Toolbar from "./Toolbar";
 import { toolRegistry } from "../tools/ToolRegistry";
-import { deleteSelectedShape, redo, shapes, undo } from "../shapes/shapeStore";
+import { deleteSelectedShape, redo, undo } from "../shapes/shapeStore";
+import UndoRedoPanel from "./UndoRedoPanel";
 
 export default function CanvasView() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -61,7 +62,6 @@ export default function CanvasView() {
         const engine = engineRef.current;
         if (!engine) return;
         engine.setTool(toolRegistry[activeTool]());
-        console.log(shapes.length)
     }, [activeTool]);
 
     return (
@@ -102,6 +102,7 @@ export default function CanvasView() {
 ">
                 <canvas ref={canvasRef} className="w-full h-full block" />
             </div>
+            <UndoRedoPanel onUndo={undo} onRedo={redo} canUndo={true} canRedo={true}></UndoRedoPanel>
         </>
     );
 }
