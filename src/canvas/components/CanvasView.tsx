@@ -13,46 +13,75 @@ import UndoRedoPanel from "./UndoRedoPanel";
 export default function CanvasView() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const engineRef = useRef<ToolEngine | null>(null);
+    const requestRenderRef = useRef<() => void>(() => { });
 
     const [activeTool, setActiveTool] = useState<ToolType>("line");
 
     useEffect(() => {
-        const canvas = canvasRef.current!;
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const ctx = canvas.getContext("2d")!;
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
 
-        const engine = new ToolEngine(toolRegistry["line"]());
+        //DPI scaling 
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        canvas.style.width = `${window.innerWidth}px`;
+        canvas.style.height = `${window.innerHeight}px`;
+        ctx.scale(dpr, dpr);
+
+        let needsRender = true;
+        const requestRender = () => {
+            needsRender = true;
+        };
+        requestRenderRef.current = requestRender;
+
+        const engine = new ToolEngine(toolRegistry["line"](requestRenderRef.current));
         engineRef.current = engine;
 
-        attachPointerHandlers(canvas, engine);
+        const detach = attachPointerHandlers(canvas, engine, requestRender);
 
         function handleKeyDown(e: KeyboardEvent) {
-            if (e.key === "Delete" || e.key === "Backspace") {
-                deleteSelectedShape();
-            }
-
-            if (e.ctrlKey && e.key === "z") {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
                 e.preventDefault();
-                undo();
+                if (e.shiftKey) {
+                    redo();
+                } else {
+                    undo();
+                }
+                requestRender();
             }
 
-            if (e.ctrlKey && e.key === "y") {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
                 e.preventDefault();
                 redo();
+                requestRender();
+            }
+
+            if (e.key === "Delete" || e.key === "Backspace") {
+                deleteSelectedShape();
+                requestRender();
             }
         }
         window.addEventListener("keydown", handleKeyDown);
 
+        let frameId: number;
         function loop() {
-            renderScene(ctx, engine);
-            requestAnimationFrame(loop);
+            if (needsRender) {
+                renderScene(ctx!, engine);
+                needsRender = false;
+            }
+
+            frameId = requestAnimationFrame(loop);
         }
 
         loop();
 
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
+            detach();
+            cancelAnimationFrame(frameId);
         };
 
     }, []);
@@ -61,8 +90,18 @@ export default function CanvasView() {
     useEffect(() => {
         const engine = engineRef.current;
         if (!engine) return;
-        engine.setTool(toolRegistry[activeTool]());
+        engine.setTool(toolRegistry[activeTool](requestRenderRef.current));
     }, [activeTool]);
+
+    const handleUndo = () => {
+        undo();
+        requestRenderRef.current();
+    };
+
+    const handleRedo = () => {
+        redo();
+        requestRenderRef.current();
+    };
 
     return (
 
@@ -102,7 +141,7 @@ export default function CanvasView() {
 ">
                 <canvas ref={canvasRef} className="w-full h-full block" />
             </div>
-            <UndoRedoPanel onUndo={undo} onRedo={redo} canUndo={true} canRedo={true}></UndoRedoPanel>
+            <UndoRedoPanel onUndo={handleUndo} onRedo={handleRedo} canUndo={true} canRedo={true}></UndoRedoPanel>
         </>
     );
 }

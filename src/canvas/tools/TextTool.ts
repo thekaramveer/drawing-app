@@ -7,6 +7,10 @@ export class TextTool implements Tool {
     private y = 0;
     private isTyping = false;
     private inputEl: HTMLInputElement | null = null;
+    private requestRender: () => void;
+    constructor(requestRender: () => void) {
+        this.requestRender = requestRender;
+    }
 
     private style: DrawingStyle = {
         stroke: "white",
@@ -75,6 +79,7 @@ export class TextTool implements Tool {
                 text: value,
                 style: this.style
             });
+            this.requestRender();
         };
 
         // ✅ Enter key
