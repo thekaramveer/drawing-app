@@ -9,6 +9,9 @@ import Toolbar from "./Toolbar";
 import { toolRegistry } from "../tools/ToolRegistry";
 import { deleteSelectedShape, redo, undo } from "../shapes/shapeStore";
 import UndoRedoPanel from "./UndoRedoPanel";
+import StrokeControlPanel from "./ControlPanel";
+
+import type { DrawingStyle } from "../core/config/drawingStyle";
 
 export default function CanvasView() {
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -17,13 +20,29 @@ export default function CanvasView() {
 
     const [activeTool, setActiveTool] = useState<ToolType>("line");
 
+    // GLOBAL DRAWING STYLE
+    const [drawingStyle, setDrawingStyle] = useState<DrawingStyle>({
+        stroke: "#ffffff",
+        lineWidth: 5,
+    });
+
+    const drawingStyleRef = useRef(drawingStyle);
+    useEffect(() => {
+        drawingStyleRef.current = drawingStyle;
+        requestRenderRef.current(); // re-render on style change
+    }, [drawingStyle]);
+
+    // return latest style
+    const getStyle = () => drawingStyleRef.current;
+
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
+
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        //DPI scaling 
+        // DPI scaling
         const dpr = window.devicePixelRatio || 1;
         canvas.width = window.innerWidth * dpr;
         canvas.height = window.innerHeight * dpr;
@@ -32,12 +51,16 @@ export default function CanvasView() {
         ctx.scale(dpr, dpr);
 
         let needsRender = true;
+
         const requestRender = () => {
             needsRender = true;
         };
+
         requestRenderRef.current = requestRender;
 
-        const engine = new ToolEngine(toolRegistry["line"](requestRenderRef.current));
+        const engine = new ToolEngine(
+            toolRegistry["line"](requestRenderRef.current, getStyle)
+        );
         engineRef.current = engine;
 
         const detach = attachPointerHandlers(canvas, engine, requestRender);
@@ -64,12 +87,15 @@ export default function CanvasView() {
                 requestRender();
             }
         }
+
         window.addEventListener("keydown", handleKeyDown);
 
         let frameId: number;
+
         function loop() {
             if (needsRender) {
-                renderScene(ctx!, engine);
+                if (!ctx) return;
+                renderScene(ctx, engine);
                 needsRender = false;
             }
 
@@ -83,15 +109,24 @@ export default function CanvasView() {
             detach();
             cancelAnimationFrame(frameId);
         };
-
     }, []);
 
-    // Tool Switching Logic
+    // TOOL SWITCHING 
     useEffect(() => {
         const engine = engineRef.current;
         if (!engine) return;
-        engine.setTool(toolRegistry[activeTool](requestRenderRef.current));
+
+        engine.setTool(
+            toolRegistry[activeTool](requestRenderRef.current, getStyle)
+        );
+
+        requestRenderRef.current();
     }, [activeTool]);
+
+    // force render when style changes
+    useEffect(() => {
+        requestRenderRef.current();
+    }, [drawingStyle]);
 
     const handleUndo = () => {
         undo();
@@ -104,44 +139,32 @@ export default function CanvasView() {
     };
 
     return (
-
-
         <>
-            <div
-                className="
-    absolute
-    top-6
-    left-1/2
-    -translate-x-1/2
-    flex
-    gap-2
-    px-4 py-2
-    rounded-full
-    bg-neutral-800/90
-    backdrop-blur-md
-    border border-neutral-700
-    shadow-lg
-    cursor-grab
-    active:cursor-grabbing
-    select-none
-  "
-            >
+            {/* Toolbar */}
+            <div className="absolute top-6 left-1/2 -translate-x-1/2 flex gap-2 px-4 py-2 rounded-full bg-neutral-800/90 backdrop-blur-md border border-neutral-700 shadow-lg cursor-grab active:cursor-grabbing select-none">
                 <Toolbar currentTool={activeTool} setTool={setActiveTool} />
             </div>
 
+            {/* Stroke Panel (for drawing style) */}
+            <div className="absolute top-20 left-6 z-50">
+                <StrokeControlPanel
+                    stroke={drawingStyle}
+                    onChange={(newStyle) => setDrawingStyle(newStyle)}
+                />
+            </div>
 
-            <div className="
-  w-full 
-  h-full 
-  rounded-2xl
-  border border-neutral-700
-  bg-neutral-950
-  shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_60px_rgba(0,0,0,0.6)]
-  overflow-hidden
-">
+            {/* Canvas */}
+            <div className="w-full h-full rounded-2xl border border-neutral-700 bg-neutral-950 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden">
                 <canvas ref={canvasRef} className="w-full h-full block" />
             </div>
-            <UndoRedoPanel onUndo={handleUndo} onRedo={handleRedo} canUndo={true} canRedo={true}></UndoRedoPanel>
+
+            {/* Undo/Redo */}
+            <UndoRedoPanel
+                onUndo={handleUndo}
+                onRedo={handleRedo}
+                canUndo={true}
+                canRedo={true}
+            />
         </>
     );
 }

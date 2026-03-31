@@ -6,10 +6,11 @@ import {
     shapes
 } from "../shapes/shapeStore";
 import { hitTest } from "../utils/hitTest/hitTest";
+import { BaseTool } from "./BaseTool";
 
 const DRAG_THRESHOLD = 5;
 
-export class SelectionTool implements Tool {
+export class SelectionTool extends BaseTool implements Tool {
     private dragging = false;
     private hasMoved = false;
     private lastX = 0;
@@ -34,6 +35,7 @@ export class SelectionTool implements Tool {
             if (clickedShape.id !== selectedShapeId) {
                 // only save if selection actually changes
                 setSelectedShapeId(clickedShape.id);
+                this.requestRender();
             }
 
             this.dragging = true;
@@ -45,6 +47,7 @@ export class SelectionTool implements Tool {
         //  clicked empty canvas
         if (selectedShapeId !== null) {
             setSelectedShapeId(null); // deselect
+            this.requestRender();
         }
     }
 
@@ -74,6 +77,7 @@ export class SelectionTool implements Tool {
 
             this.lastX = x;
             this.lastY = y;
+            this.requestRender();
         }
     }
 

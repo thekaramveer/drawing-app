@@ -1,10 +1,11 @@
 import type { Tool } from "./Tool";
 import { addShape, saveState } from "../shapes/shapeStore";
 import type { DrawingStyle } from "../core/config/drawingStyle";
+import { BaseTool } from "./BaseTool";
 
 const DRAG_THRESHOLD = 5;
 
-export class StarTool implements Tool {
+export class StarTool extends BaseTool implements Tool {
     private startX = 0;
     private startY = 0;
     private currentX = 0;
@@ -41,6 +42,7 @@ export class StarTool implements Tool {
         if (this.hasDragged) {
             this.currentX = x;
             this.currentY = y;
+            this.requestRender();
         }
     }
 
@@ -52,7 +54,7 @@ export class StarTool implements Tool {
         if (!this.hasDragged) return;
 
         saveState();
-
+        const style = this.getStyle();
         addShape({
             id: crypto.randomUUID(),
             type: "star",
@@ -60,7 +62,7 @@ export class StarTool implements Tool {
             y1: this.startY,
             x2: x,
             y2: y,
-            style: this.style
+            style: { ...style }
         });
 
         this.hasDragged = false;
@@ -68,7 +70,9 @@ export class StarTool implements Tool {
 
     drawPreview(ctx: CanvasRenderingContext2D) {
         if (!this.drawing || !this.hasDragged) return;
-
+        const style = this.getStyle();
+        ctx.strokeStyle = style.stroke;
+        ctx.lineWidth = style.lineWidth;
         this.drawStar(ctx, this.startX, this.startY, this.currentX, this.currentY);
     }
 

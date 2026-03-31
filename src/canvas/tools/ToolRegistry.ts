@@ -8,19 +8,37 @@ import { TriangleTool } from "./TriangleTool";
 import { StarTool } from "./StarTool";
 import { SelectionTool } from "./SelectionTool";
 import { TextTool } from "./TextTool";
+import type { DrawingStyle } from "../core/config/drawingStyle";
 
 
-type ToolFactory = (requestRender: () => void) => Tool;
+type ToolFactory = (
+    requestRender: () => void,
+    getStyle: () => DrawingStyle
+) => Tool;
 
 
 export const toolRegistry: Record<ToolType, ToolFactory> = {
-    line: (_requestRender) => new LineTool(),
-    ellipse: (_requestRender) => new EllipseTool(),
-    arrow: (_requestRender) => new ArrowTool(),
-    rect: (_requestRender) => new RectTool(),
-    triangle: (_requestRender) => new TriangleTool(),
-    star: (_requestRender) => new StarTool(),
-    selection: (_requestRender) => new SelectionTool(),
-    text: (requestRender) => new TextTool(requestRender),
+    line: (requestRender, getStyle) =>
+        new LineTool(requestRender, getStyle),
 
+    ellipse: (requestRender, getStyle) =>
+        new EllipseTool(requestRender, getStyle),
+
+    arrow: (requestRender, getStyle) =>
+        new ArrowTool(requestRender, getStyle),
+
+    rect: (requestRender, getStyle) =>
+        new RectTool(requestRender, getStyle),
+
+    triangle: (requestRender, getStyle) =>
+        new TriangleTool(requestRender, getStyle),
+
+    star: (requestRender, getStyle) =>
+        new StarTool(requestRender, getStyle),
+
+    selection: (requestRender, getStyle) =>
+        new SelectionTool(requestRender, getStyle),
+
+    text: (requestRender, getStyle) =>
+        new TextTool(requestRender, getStyle),
 };

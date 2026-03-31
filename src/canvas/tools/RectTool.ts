@@ -1,10 +1,11 @@
 import type { DrawingStyle } from "../core/config/drawingStyle";
 import { addShape, saveState } from "../shapes/shapeStore";
+import { BaseTool } from "./BaseTool";
 import type { Tool } from "./Tool";
 
 const DRAG_THRESHOLD = 3;
 
-export class RectTool implements Tool {
+export class RectTool extends BaseTool implements Tool {
     private startX = 0;
     private startY = 0;
     private currentX = 0;
@@ -40,6 +41,7 @@ export class RectTool implements Tool {
         if (this.hasDragged) {
             this.currentX = x;
             this.currentY = y;
+            this.requestRender();
         }
     }
 
@@ -55,7 +57,7 @@ export class RectTool implements Tool {
 
 
         saveState();
-
+        const style = this.getStyle();
         addShape({
             id: crypto.randomUUID(),
             type: "rect",
@@ -63,7 +65,7 @@ export class RectTool implements Tool {
             y1: this.startY,
             x2: x,
             y2: y,
-            style: this.style
+            style: { ...style }
         });
 
         this.hasDragged = false;
@@ -75,10 +77,10 @@ export class RectTool implements Tool {
 
         const w = this.currentX - this.startX;
         const h = this.currentY - this.startY;
-
+        const style = this.getStyle();
         ctx.beginPath();
-        ctx.strokeStyle = this.style.stroke;
-        ctx.lineWidth = this.style.lineWidth;
+        ctx.strokeStyle = style.stroke;
+        ctx.lineWidth = style.lineWidth;
         ctx.rect(this.startX, this.startY, w, h);
         ctx.stroke();
     }
