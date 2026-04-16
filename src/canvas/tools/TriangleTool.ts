@@ -1,6 +1,5 @@
 import type { Tool } from "./Tool";
 import { addShape, saveState } from "../shapes/shapeStore";
-import type { DrawingStyle } from "../core/config/drawingStyle";
 import { BaseTool } from "./BaseTool";
 
 const DRAG_THRESHOLD = 5;
@@ -12,10 +11,6 @@ export class TriangleTool extends BaseTool implements Tool {
     private currentY = 0;
     private drawing = false;
     private hasDragged = false;
-    private style: DrawingStyle = {
-        stroke: "white",
-        lineWidth: 5
-    }
 
     onMouseDown(x: number, y: number) {
         this.startX = x;

@@ -1,4 +1,3 @@
-import type { DrawingStyle } from "../core/config/drawingStyle";
 import { addShape, saveState } from "../shapes/shapeStore";
 import { BaseTool } from "./BaseTool";
 import type { Tool } from "./Tool";
@@ -13,10 +12,6 @@ export class RectTool extends BaseTool implements Tool {
     private drawing = false;
     private hasDragged = false;
 
-    private style: DrawingStyle = {
-        stroke: "white",
-        lineWidth: 5
-    };
 
     onMouseDown(x: number, y: number): void {
         this.startX = x;
