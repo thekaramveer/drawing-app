@@ -19,7 +19,7 @@ export default function StrokeControlPanel({ stroke, onChange }: Props) {
 
             {/* Stroke Section */}
             <div className="flex items-center gap-3 mb-3">
-                <p className="text-white text-lg font-medium">Stroke</p>
+                <p className="text-white text-lg font-small">Stroke</p>
 
                 <div className="flex gap-2">
                     {colors.map((c, i) => (
@@ -41,7 +41,7 @@ export default function StrokeControlPanel({ stroke, onChange }: Props) {
 
             {/* Width Section */}
             <div className="flex items-center gap-3">
-                <p className="text-white text-lg font-medium">Width</p>
+                <p className="text-white text-lg font-small">Width</p>
 
                 <input
                     type="range"
