@@ -1,6 +1,5 @@
 import type { Tool } from "./Tool";
 import { addShape, saveState } from "../shapes/shapeStore";
-import type { DrawingStyle } from "../core/config/drawingStyle";
 import { BaseTool } from "./BaseTool";
 
 const DRAG_THRESHOLD = 5;
@@ -13,10 +12,6 @@ export class StarTool extends BaseTool implements Tool {
 
     private drawing = false;
     private hasDragged = false;
-    private style: DrawingStyle = {
-        stroke: "white",
-        lineWidth: 4
-    }
 
     onMouseDown(x: number, y: number) {
         this.startX = x;
@@ -96,8 +91,6 @@ export class StarTool extends BaseTool implements Tool {
         const spikes = 5;
         let rotation = Math.PI / 2 * 3;
         const step = Math.PI / spikes;
-        ctx.strokeStyle = this.style.stroke;
-        ctx.lineWidth = this.style.lineWidth;
 
         ctx.beginPath();
         ctx.moveTo(centerX, centerY - outerRadius);
