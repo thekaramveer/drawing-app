@@ -3,9 +3,10 @@ import type { Shape } from "../shapes/shapeTypes";
 export function drawSelectionOutline(ctx: CanvasRenderingContext2D, shape: Shape) {
     ctx.save();
 
-    ctx.strokeStyle = "blue";
+    // Excalidraw-style colors: semi-transparent blue fill, solid blue stroke
+    ctx.fillStyle = "rgba(105, 101, 219, 0.08)";
+    ctx.strokeStyle = "rgba(105, 101, 219, 1)";
     ctx.lineWidth = 1;
-    ctx.setLineDash([5, 5]);
 
     const minX = Math.min(shape.x1, shape.x2);
     const minY = Math.min(shape.y1, shape.y2);

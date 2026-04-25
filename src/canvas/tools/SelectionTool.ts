@@ -16,6 +16,13 @@ export class SelectionTool extends BaseTool implements Tool {
     private lastX = 0;
     private lastY = 0;
 
+    // State for the Selection Marquee ---
+    private isBoxSelecting = false;
+    private startX = 0;
+    private startY = 0;
+    private currentX = 0;
+    private currentY = 0;
+
     onMouseDown(x: number, y: number) {
         this.dragging = false;
         this.hasMoved = false;
@@ -49,9 +56,24 @@ export class SelectionTool extends BaseTool implements Tool {
             setSelectedShapeId(null); // deselect
             this.requestRender();
         }
+
+        // ---Start Box Selection ---
+        this.isBoxSelecting = true;
+        this.startX = x;
+        this.startY = y;
+        this.currentX = x;
+        this.currentY = y;
     }
 
     onMouseMove(x: number, y: number) {
+        // ---Handle Box Selection Dragging ---
+        if (this.isBoxSelecting) {
+            this.currentX = x;
+            this.currentY = y;
+            this.requestRender(); // Force re-render to draw the growing box
+            return;
+        }
+
         if (!this.dragging || !selectedShapeId) return;
 
         const shape = shapes.find(s => s.id === selectedShapeId);
@@ -82,10 +104,38 @@ export class SelectionTool extends BaseTool implements Tool {
     }
 
     onMouseUp() {
+        // --- Handle Box Selection Finish ---
+        if (this.isBoxSelecting) {
+            this.isBoxSelecting = false;
+
+            // TODO: Here is where i will eventually add logic to find 
+            // all shapes that intersect with selection rectangle 
+            // and will add them to a multi-selection array.
+
+            this.requestRender(); // Re-render to erase the box
+        }
+
         // reset
         this.dragging = false;
         this.hasMoved = false;
     }
 
-    drawPreview() { }
+    drawPreview(ctx: CanvasRenderingContext2D) {
+        if (this.isBoxSelecting) {
+            const width = this.currentX - this.startX;
+            const height = this.currentY - this.startY;
+
+            ctx.save();
+
+            // Excalidraw-style colors: semi-transparent blue fill, solid blue stroke
+            ctx.fillStyle = "rgba(105, 101, 219, 0.08)";
+            ctx.strokeStyle = "rgba(105, 101, 219, 1)";
+            ctx.lineWidth = 1;
+
+            ctx.fillRect(this.startX, this.startY, width, height);
+            ctx.strokeRect(this.startX, this.startY, width, height);
+
+            ctx.restore();
+        }
+    }
 }
