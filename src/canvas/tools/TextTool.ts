@@ -73,6 +73,7 @@ export class TextTool extends BaseTool implements Tool {
             });
 
             this.requestRender();
+            this.onComplete();
         };
 
         // Enter key

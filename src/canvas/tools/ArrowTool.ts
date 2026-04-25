@@ -61,8 +61,10 @@ export class ArrowTool extends BaseTool implements Tool {
             style: { ...style }, // ✅ prevent reference bug
         });
 
-        this.hasDragged = false;
         this.requestRender();
+        this.onComplete();
+        this.hasDragged = false;
+
     }
 
     drawPreview(ctx: CanvasRenderingContext2D) {

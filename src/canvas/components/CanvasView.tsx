@@ -20,6 +20,20 @@ export default function CanvasView() {
 
     const [activeTool, setActiveTool] = useState<ToolType>("line");
 
+    // --- Tool Lock State ---
+    const [isToolLocked, setIsToolLocked] = useState(false);
+    const isToolLockedRef = useRef(isToolLocked);
+    const activeToolRef = useRef(activeTool);
+
+    // Keep refs in sync for the callback without triggering re-renders
+    useEffect(() => {
+        isToolLockedRef.current = isToolLocked;
+    }, [isToolLocked]);
+
+    useEffect(() => {
+        activeToolRef.current = activeTool;
+    }, [activeTool]);
+
     // GLOBAL DRAWING STYLE
     const [drawingStyle, setDrawingStyle] = useState<DrawingStyle>({
         stroke: "#ffffff",
@@ -34,6 +48,13 @@ export default function CanvasView() {
 
     // return latest style
     const getStyle = () => drawingStyleRef.current;
+
+    // --- Callback fired by tools when they finish drawing ---
+    const handleToolComplete = useRef(() => {
+        if (!isToolLockedRef.current && activeToolRef.current !== "selection") {
+            setActiveTool("selection");
+        }
+    });
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -59,7 +80,7 @@ export default function CanvasView() {
         requestRenderRef.current = requestRender;
 
         const engine = new ToolEngine(
-            toolRegistry["line"](requestRenderRef.current, getStyle)
+            toolRegistry["line"](requestRenderRef.current, getStyle, handleToolComplete.current)
         );
         engineRef.current = engine;
 
@@ -117,7 +138,7 @@ export default function CanvasView() {
         if (!engine) return;
 
         engine.setTool(
-            toolRegistry[activeTool](requestRenderRef.current, getStyle)
+            toolRegistry[activeTool](requestRenderRef.current, getStyle, handleToolComplete.current)
         );
 
         requestRenderRef.current();
@@ -142,7 +163,13 @@ export default function CanvasView() {
         <>
             {/* Toolbar */}
             <div className="absolute top-6 left-1/2 -translate-x-1/2 flex gap-2 px-4 py-2 rounded-full bg-neutral-800/90 backdrop-blur-md border border-neutral-700 shadow-lg cursor-grab active:cursor-grabbing select-none">
-                <Toolbar currentTool={activeTool} setTool={setActiveTool} />
+                {/* Pass lock state to Toolbar */}
+                <Toolbar
+                    currentTool={activeTool}
+                    setTool={setActiveTool}
+                    isLocked={isToolLocked}
+                    setIsLocked={setIsToolLocked}
+                />
             </div>
 
             {/* Stroke Panel (for drawing style) */}

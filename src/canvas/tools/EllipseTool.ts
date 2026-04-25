@@ -58,6 +58,10 @@ export class EllipseTool extends BaseTool implements Tool {
             y2: y,
             style: { ...this.getStyle() }
         });
+
+        this.requestRender();
+        this.onComplete();
+
     }
 
     drawPreview(ctx: CanvasRenderingContext2D) {

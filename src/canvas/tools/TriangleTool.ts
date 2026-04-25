@@ -57,6 +57,9 @@ export class TriangleTool extends BaseTool implements Tool {
             y2: y,
             style: { ...style }
         });
+
+        this.requestRender();
+        this.onComplete();
     }
 
     drawPreview(ctx: CanvasRenderingContext2D) {

@@ -13,32 +13,32 @@ import type { DrawingStyle } from "../core/config/drawingStyle";
 
 type ToolFactory = (
     requestRender: () => void,
-    getStyle: () => DrawingStyle
+    getStyle: () => DrawingStyle,
+    onComplete: () => void
 ) => Tool;
 
-
 export const toolRegistry: Record<ToolType, ToolFactory> = {
-    line: (requestRender, getStyle) =>
-        new LineTool(requestRender, getStyle),
+    line: (requestRender, getStyle, onComplete) =>
+        new LineTool(requestRender, getStyle, onComplete),
 
-    ellipse: (requestRender, getStyle) =>
-        new EllipseTool(requestRender, getStyle),
+    ellipse: (requestRender, getStyle, onComplete) =>
+        new EllipseTool(requestRender, getStyle, onComplete),
 
-    arrow: (requestRender, getStyle) =>
-        new ArrowTool(requestRender, getStyle),
+    arrow: (requestRender, getStyle, onComplete) =>
+        new ArrowTool(requestRender, getStyle, onComplete),
 
-    rect: (requestRender, getStyle) =>
-        new RectTool(requestRender, getStyle),
+    rect: (requestRender, getStyle, onComplete) =>
+        new RectTool(requestRender, getStyle, onComplete),
 
-    triangle: (requestRender, getStyle) =>
-        new TriangleTool(requestRender, getStyle),
+    triangle: (requestRender, getStyle, onComplete) =>
+        new TriangleTool(requestRender, getStyle, onComplete),
 
-    star: (requestRender, getStyle) =>
-        new StarTool(requestRender, getStyle),
+    star: (requestRender, getStyle, onComplete) =>
+        new StarTool(requestRender, getStyle, onComplete),
 
-    selection: (requestRender, getStyle) =>
-        new SelectionTool(requestRender, getStyle),
+    selection: (requestRender, getStyle, onComplete) =>
+        new SelectionTool(requestRender, getStyle, onComplete),
 
-    text: (requestRender, getStyle) =>
-        new TextTool(requestRender, getStyle),
+    text: (requestRender, getStyle, onComplete) =>
+        new TextTool(requestRender, getStyle, onComplete),
 };

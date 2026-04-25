@@ -61,6 +61,9 @@ export class StarTool extends BaseTool implements Tool {
         });
 
         this.hasDragged = false;
+        this.requestRender();
+        this.onComplete();
+
     }
 
     drawPreview(ctx: CanvasRenderingContext2D) {

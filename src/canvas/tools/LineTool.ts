@@ -53,6 +53,10 @@ export class LineTool extends BaseTool implements Tool {
             style: { ...style },
         });
         this.hasDragged = false;
+        //calling onComplete after the shape is successfully committed to the canvas.
+
+        this.requestRender();
+        this.onComplete();
     }
 
     drawPreview(ctx: CanvasRenderingContext2D) {
