@@ -182,7 +182,7 @@ export default function CanvasView() {
 
             {/* Canvas */}
             <div className="w-full h-full rounded-2xl border border-neutral-700 bg-neutral-950 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_60px_rgba(0,0,0,0.6)] overflow-hidden">
-                <canvas ref={canvasRef} className="w-full h-full block" />
+                <canvas ref={canvasRef} className={`w-full h-full block ${activeTool !== "selection" ? "cursor-crosshair" : "cursor-default"}`} />
             </div>
 
             {/* Undo/Redo */}
